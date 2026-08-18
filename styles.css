@@ -590,6 +590,31 @@ main {
   line-height: 1.5;
 }
 
+/* Descarga del diagnostico completo en PDF */
+.pdf-cta {
+  background: var(--bg-soft);
+  border: 1.5px dashed var(--blue-dark);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.pdf-cta h4 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.pdf-cta .sub {
+  color: var(--muted);
+  font-size: 0.88rem;
+  margin: 0 0 16px;
+}
+
+.pdf-cta .error-banner {
+  text-align: left;
+}
+
 /* Lead capture (optional email) */
 .lead-box {
   background: var(--bg-soft);

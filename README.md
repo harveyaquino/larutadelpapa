@@ -8,8 +8,12 @@ información actualizada, qué puede hacer un cliente por internet, registro
 comercial, capacidad de atención y necesidades de apoyo. Al terminar, una IA
 (Claude) genera al instante un **diagnóstico personalizado (sin precios)** de
 las oportunidades que el negocio está perdiendo, para generar interés real.
-Dejar los datos de contacto para recibir el informe completo es **opcional**.
-El look and feel
+Desde esa misma pantalla se puede **descargar un diagnóstico completo en
+PDF** (puntaje por dimensión, fortalezas, brechas y plan de acción con
+plazos) — se genera enteramente en el navegador con `jsPDF` y nunca se sube
+ni se guarda en ningún backend ni en Supabase. Dejar los datos de contacto
+para que un asesor te escriba es **opcional** y no es necesario para
+descargar el PDF. El look and feel
 está tomado de [ide-solution.com](https://www.ide-solution.com/) (mismos
 colores, tipografía y logo), es 100% responsive, y tiene un botón flotante de
 WhatsApp al costado que abre un chat directo con IDE Solution.
@@ -134,7 +138,9 @@ web/
 
 - **Prompt de la IA** (tono, reglas, qué debe destacar): `api/diagnostico.js` → `SYSTEM_PROMPT`.
 - **Preguntas y opciones**: `index.html` (cada pregunta es un `.option-grid` con `data-question`) + los mapas de validación en `api/diagnostico.js` (`SINGLE_QUESTIONS` / `MULTI_QUESTIONS`).
-- **Diagnóstico de respaldo** (si la IA falla o no hay clave configurada): `app.js` → `INSIGHT_RULES` / `BUSINESS_CONTEXT`.
+- **Diagnóstico de respaldo** (si la IA falla o no hay clave configurada): `app.js` → `PRIORITY_RULES` / `FORTALEZA_RULES` / `BUSINESS_CONTEXT`.
+- **Rúbrica de puntaje del PDF** (determinística, no depende de la IA): `app.js` → `computeScoring`.
+- **Contenido/diseño del PDF**: `app.js` → `downloadDiagnosticoPdf`.
 - **Número de WhatsApp**: `index.html` → busca `wa.me/51964484382` (es el número público de IDE Solution).
 
 En ningún punto del flujo se muestra un precio — ni en el diagnóstico de la
