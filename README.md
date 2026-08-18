@@ -27,15 +27,17 @@ nada más que las variables de entorno.
 
 ## 2. Conectar la web con Supabase
 
-Abre [`config.js`](config.js) y reemplaza los valores de ejemplo:
+No se edita ningún archivo del código: los valores se leen en tiempo real
+desde las variables de entorno de Vercel a través de `api/config.js` (una
+función serverless que se los sirve al navegador). En el proyecto de Vercel →
+**Settings → Environment Variables**, agrega:
 
-```js
-window.SUPABASE_URL = "https://TU-PROYECTO.supabase.co";
-window.SUPABASE_ANON_KEY = "TU-ANON-KEY";
-```
+- `SUPABASE_URL` = tu Project URL
+- `SUPABASE_ANON_KEY` = tu anon / public key
 
-Es seguro que estos valores queden visibles en el navegador: la tabla `leads`
-solo acepta INSERT gracias a la política de RLS del paso anterior.
+Aplícalas a **Production** (y **Preview** si vas a probar antes de publicar).
+Es seguro usar la anon key aquí: la tabla `leads` solo acepta INSERT gracias a
+la política de RLS del paso anterior.
 
 ## 3. Publicar en Vercel
 
@@ -60,10 +62,12 @@ El diagnóstico personalizado lo genera `api/diagnostico.js` usando la API de
 Claude (`claude-opus-5`). Sin esta clave, la web sigue funcionando: muestra un
 diagnóstico de respaldo (predefinido, sin IA) en vez de fallar.
 
-1. En el proyecto de Vercel → **Settings → Environment Variables**.
-2. Agrega: `ANTHROPIC_API_KEY` = tu clave de la consola de Anthropic (console.anthropic.com).
-3. Aplica a **Production** (y Preview si vas a probar antes de publicar).
-4. Vuelve a desplegar (`npx vercel --prod`) para que tome la variable.
+1. En el mismo lugar del paso anterior (**Settings → Environment Variables**), agrega:
+   `ANTHROPIC_API_KEY` = tu clave de la consola de Anthropic (console.anthropic.com).
+2. Aplica a **Production** (y Preview si vas a probar antes de publicar).
+3. **Vuelve a desplegar** (Deployments → el último deploy → menú "..." → Redeploy,
+   o `npx vercel --prod`) para que tome las variables nuevas — agregarlas
+   solas no actualiza un deploy que ya está corriendo.
 
 ## 5. Probar en tu computadora (opcional)
 
@@ -81,8 +85,13 @@ que la IA responda en local, define la variable antes de levantar el server:
 ```bash
 # PowerShell
 $env:ANTHROPIC_API_KEY = "tu-clave"
+$env:SUPABASE_URL = "https://tu-proyecto.supabase.co"
+$env:SUPABASE_ANON_KEY = "tu-anon-key"
 npx vercel dev
 ```
+
+O más simple: `npx vercel env pull .env.local` (una vez vinculado el proyecto)
+para traer automáticamente las variables ya configuradas en Vercel.
 
 ## 6. Generar el QR para el evento
 
@@ -104,9 +113,9 @@ web/
 ├── index.html              landing + wizard (3 pantallas) + botón WhatsApp
 ├── styles.css                estilos con la identidad de ide-solution.com
 ├── app.js                     lógica del wizard + llamada a /api/diagnostico + Supabase
-├── config.js                  credenciales públicas de Supabase (rellenar)
 ├── package.json                dependencia del SDK de Anthropic
 ├── api/diagnostico.js         función serverless: genera el diagnóstico con Claude
+├── api/config.js               función serverless: sirve SUPABASE_URL / SUPABASE_ANON_KEY al navegador
 └── supabase/schema.sql        script SQL para crear la tabla `leads`
 ```
 
