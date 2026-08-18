@@ -3,58 +3,144 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
 
 // ---------- Contenido de respaldo (si la IA falla o no hay API key) ----------
-const PROBLEM_INSIGHTS = {
-  "No tengo web ni presencia online":
-    "Tu cliente te busca en Google y encuentra a la competencia: un turista o vecino que busca tu rubro simplemente no te encuentra.",
-  "Pierdo clientes que no regresan":
-    "El cliente te ve, le gusta, lo piensa y se pierde entre cientos de negocios. Sin forma de recontactarlo, esa venta futura se queda en el camino.",
-  "No llevo control de mis ventas":
-    "Estás vendiendo a ciegas: no saber qué vendiste, qué te queda o cuál es tu producto estrella te impide tomar decisiones.",
-  "No sé qué tengo en stock":
-    "Riesgo de quedarte sin lo que más se vende justo en los días de mayor demanda, o de comprar de más lo que no rota.",
-  "No emito comprobantes electrónicos":
-    "Desde 2026 la facturación electrónica deja de ser opcional para más MYPEs. No tenerla lista a tiempo puede traerte problemas normativos.",
-  "Gestiono todo por WhatsApp sin orden":
-    "Pedidos y clientes se pierden en el chat: se mezclan conversaciones, se olvidan seguimientos y se pierde tiempo cada semana.",
-  "Mi equipo no tiene herramientas":
-    "Tu equipo pierde horas en tareas manuales que podrían tomar minutos con las herramientas correctas.",
-  "No tengo data ni reportes":
-    "Decides a ciegas: sin reportes no sabes qué producto o servicio realmente te da más ganancia.",
-};
-
 const BUSINESS_CONTEXT = {
-  "Comercio / tienda":
-    "con miles de turistas caminando por Chiclayo, tu tienda puede captar clientes nuevos que hoy pasan de largo por no saber que existes.",
-  "Servicios profesionales":
-    "cada vez más personas buscan servicios profesionales recomendados en internet antes de llamar. Si no te encuentran ahí, pierdes la primera impresión.",
-  "Restaurante / food":
+  "Alojamiento":
+    "con miles de turistas buscando dónde hospedarse, tu propiedad puede llenarse si aparece donde ellos buscan primero: Google y plataformas de reservas.",
+  "Restaurantes y alimentación":
     "los turistas eligen dónde comer buscando en Google Maps minutos antes de llegar. Un restaurante sin presencia digital pierde esas mesas.",
-  "Producción / manufactura":
-    "la demanda extra del evento es una oportunidad para vender más volumen, pero sin control de stock y ventas es difícil responder a tiempo.",
-  "Inmobiliaria / construcción":
-    "la visita del Papa puede traer más movimiento e interés en la zona. Sin seguimiento ordenado de contactos, esas oportunidades se enfrían.",
-  "Otro negocio":
+  "Cafeterías, juguerías y consumo rápido":
+    "el flujo de visitantes caminando por el centro busca opciones rápidas desde el celular; si no apareces ahí, elige a la competencia de la cuadra siguiente.",
+  "Transporte y movilidad":
+    "miles de visitantes necesitarán movilizarse por Chiclayo durante el evento; quien los ubique primero por WhatsApp o reservas online se queda con el viaje.",
+  "Agencias y servicios turísticos":
+    "los turistas arman su itinerario buscando tours y experiencias en internet antes de llegar. Sin presencia digital ordenada, ese paquete lo vende otra agencia.",
+  "Recreación, cultura y experiencias":
+    "la ola de visitantes busca qué hacer y a dónde ir directamente desde el celular; sin información clara y actualizada, tu experiencia queda fuera del plan.",
+  "Artesanía y productos locales":
+    "el turista compra recuerdos y productos locales guiado por lo que encuentra en Google Maps o redes sociales cerca de donde está parado.",
+  "Comercio y servicios al visitante":
+    "con miles de visitantes caminando por Chiclayo, tu negocio puede captar clientes nuevos que hoy pasan de largo por no saber que existes.",
+  "Otro":
     "la ola de visitantes que trae este evento es una oportunidad puntual, y aprovecharla depende de qué tan lista está la parte digital de tu negocio.",
 };
 
-function fallbackDiagnostico(tipoNegocio, problemas) {
+const INSIGHT_RULES = [
+  {
+    check: (a) => a.canales.length === 0 || a.canales.includes("Ninguno"),
+    text: "Tu negocio no aparece en ningún canal digital: el turista que te busca en Google o Maps simplemente no te encuentra y elige a la competencia.",
+  },
+  {
+    check: (a) =>
+      a.infoActualizada === "No" ||
+      a.infoActualizada === "No lo sé" ||
+      a.infoActualizada === "No tengo presencia digital",
+    text: "Tu dirección, horario o fotos desactualizadas hacen que un visitante llegue a la hora equivocada o directamente no vaya, aunque ya te haya encontrado.",
+  },
+  {
+    check: (a) =>
+      a.accionesCliente.length === 0 ||
+      a.accionesCliente.includes("Ninguna") ||
+      (a.accionesCliente.length === 1 && a.accionesCliente.includes("Solamente puede ver información")),
+    text: "Hoy un cliente solo puede mirar: no puede reservar, pedir ni pagar por internet, así que esa venta depende de que te llame o te encuentre en persona.",
+  },
+  {
+    check: (a) => a.registro === "Todo queda en WhatsApp" || a.registro === "No realizo un registro",
+    text: "Sin un registro ordenado de consultas y pedidos, varias ventas se pierden entre mensajes de WhatsApp que nadie vuelve a revisar.",
+  },
+  {
+    check: (a) =>
+      a.atencionConsultas === "Tendría dificultades" ||
+      a.atencionConsultas === "Necesitaría una herramienta o sistema" ||
+      a.atencionConsultas === "No lo he evaluado",
+    text: "Si te llegan muchas consultas a la vez durante el evento, hoy no tienes cómo responderlas a todas a tiempo — y cada una sin responder es una venta que se enfría.",
+  },
+  {
+    check: (a) => a.capacidad === "No, actualmente estoy al límite" || a.capacidad === "No lo he evaluado",
+    text: "Con más clientes de los que puedes atender hoy, corres el riesgo de decepcionar justo a los visitantes que llegaron una sola vez a Chiclayo.",
+  },
+  {
+    check: (a) => a.oferta === "Todavía no lo he evaluado" || a.oferta === "Tengo una idea, pero debo desarrollarla",
+    text: "Todavía no tienes lista una oferta pensada para el visitante del evento, así que puedes estar dejando pasar la demanda extra sin capturarla.",
+  },
+];
+
+function fallbackDiagnostico(answers) {
+  const oportunidades = INSIGHT_RULES.filter((r) => r.check(answers))
+    .map((r) => r.text)
+    .slice(0, 4);
+
+  if (oportunidades.length === 0) {
+    oportunidades.push(
+      "Tu negocio ya tiene varias bases digitales cubiertas: el siguiente paso es afinar los detalles para no perder ni una venta durante el evento."
+    );
+  }
+
   return {
     gancho: "Estás dejando ventas sobre la mesa",
-    parrafo: `Como negocio de ${tipoNegocio.toLowerCase()}, ${BUSINESS_CONTEXT[tipoNegocio] || "hay una oportunidad puntual en este evento que depende de qué tan lista está la parte digital de tu negocio."}`,
-    oportunidades: [...problemas]
-      .slice(0, 4)
-      .map((p) => PROBLEM_INSIGHTS[p] || p),
+    parrafo: `Como negocio de ${(answers.actividad || "tu rubro").toLowerCase()}, ${
+      BUSINESS_CONTEXT[answers.actividad] || BUSINESS_CONTEXT["Otro"]
+    }`,
+    oportunidades,
     recomendacion:
       "La buena noticia: esto se ordena rápido y no tienes que resolverlo solo. Con el acompañamiento correcto, en poco tiempo puedes llegar a la visita del Papa con tu negocio listo para vender más.",
   };
 }
 
 // ---------- Estado ----------
+const QUESTION_CONFIG = {
+  actividad: { type: "single" },
+  oferta: { type: "single" },
+  capacidad: { type: "single" },
+  canales: { type: "multi" },
+  infoActualizada: { type: "single" },
+  accionesCliente: { type: "multi" },
+  registro: { type: "single" },
+  atencionConsultas: { type: "single" },
+  necesidades: { type: "multi" },
+};
+
+const PANEL_QUESTIONS = {
+  1: ["actividad", "oferta", "capacidad"],
+  2: ["canales", "infoActualizada", "accionesCliente"],
+  3: ["registro", "atencionConsultas"],
+  4: ["necesidades"],
+};
+
+const NEXT_BUTTON_BY_PANEL = { 1: "btn-to-2", 2: "btn-to-3", 3: "btn-to-4", 4: "btn-to-5" };
+
+const KEY_TO_PANEL = {};
+Object.entries(PANEL_QUESTIONS).forEach(([panel, keys]) => {
+  keys.forEach((key) => (KEY_TO_PANEL[key] = Number(panel)));
+});
+
 const state = {
   step: 1,
-  tipoNegocio: null,
-  problemas: new Set(),
+  answers: {
+    actividad: null,
+    oferta: null,
+    capacidad: null,
+    canales: new Set(),
+    infoActualizada: null,
+    accionesCliente: new Set(),
+    registro: null,
+    atencionConsultas: null,
+    necesidades: new Set(),
+  },
 };
+
+function serializeAnswers() {
+  return {
+    actividad: state.answers.actividad,
+    oferta: state.answers.oferta,
+    capacidad: state.answers.capacidad,
+    canales: [...state.answers.canales],
+    infoActualizada: state.answers.infoActualizada,
+    accionesCliente: [...state.answers.accionesCliente],
+    registro: state.answers.registro,
+    atencionConsultas: state.answers.atencionConsultas,
+    necesidades: [...state.answers.necesidades],
+  };
+}
 
 // ---------- Navegación ----------
 const screenLanding = document.getElementById("screen-landing");
@@ -63,6 +149,8 @@ const panels = {
   1: document.getElementById("panel-1"),
   2: document.getElementById("panel-2"),
   3: document.getElementById("panel-3"),
+  4: document.getElementById("panel-4"),
+  5: document.getElementById("panel-5"),
 };
 const stepDots = document.querySelectorAll(".step-dot");
 
@@ -85,47 +173,89 @@ document.getElementById("btn-start").addEventListener("click", () => {
   goToStep(1);
 });
 
-// ---------- Paso 1: tipo de negocio ----------
-const businessGrid = document.getElementById("business-grid");
-const btnTo2 = document.getElementById("btn-to-2");
+// ---------- Preguntas de opción única / múltiple ----------
+function isAnswered(key) {
+  const value = state.answers[key];
+  return value instanceof Set ? value.size > 0 : value !== null;
+}
 
-businessGrid.addEventListener("click", (e) => {
-  const card = e.target.closest(".option-card");
-  if (!card) return;
-  [...businessGrid.children].forEach((c) => c.classList.remove("selected"));
+function updateNextButton(panel) {
+  const btn = document.getElementById(NEXT_BUTTON_BY_PANEL[panel]);
+  if (!btn) return;
+  btn.disabled = !PANEL_QUESTIONS[panel].every(isAnswered);
+}
+
+function updateMultiDisabledState(grid, key) {
+  const max = grid.dataset.max ? Number(grid.dataset.max) : null;
+  if (!max) return;
+  const set = state.answers[key];
+  const atMax = set.size >= max;
+  [...grid.children].forEach((card) => {
+    if (!set.has(card.dataset.value)) {
+      card.classList.toggle("disabled", atMax);
+    }
+  });
+}
+
+function handleSingleSelect(grid, key, card, value) {
+  [...grid.children].forEach((c) => c.classList.remove("selected"));
   card.classList.add("selected");
-  state.tipoNegocio = card.dataset.value;
-  btnTo2.disabled = false;
-});
+  state.answers[key] = value;
+}
 
-btnTo2.addEventListener("click", () => goToStep(2));
+function handleMultiSelect(grid, key, card, value) {
+  const set = state.answers[key];
+  const exclusive = grid.dataset.exclusive;
 
-// ---------- Paso 2: problemas digitales ----------
-const problemsGrid = document.getElementById("problems-grid");
-const btnTo3 = document.getElementById("btn-to-3");
-const btnTo1 = document.getElementById("btn-to-1");
-
-problemsGrid.addEventListener("click", (e) => {
-  const card = e.target.closest(".option-card");
-  if (!card) return;
-  const value = card.dataset.value;
-  if (state.problemas.has(value)) {
-    state.problemas.delete(value);
+  if (set.has(value)) {
+    set.delete(value);
     card.classList.remove("selected");
   } else {
-    state.problemas.add(value);
+    if (exclusive && value === exclusive) {
+      set.clear();
+      [...grid.children].forEach((c) => c.classList.remove("selected"));
+    } else if (exclusive && set.has(exclusive)) {
+      set.delete(exclusive);
+      const exCard = [...grid.children].find((c) => c.dataset.value === exclusive);
+      if (exCard) exCard.classList.remove("selected");
+    }
+    set.add(value);
     card.classList.add("selected");
   }
-  btnTo3.disabled = state.problemas.size === 0;
+  updateMultiDisabledState(grid, key);
+}
+
+document.querySelectorAll(".option-grid[data-question]").forEach((grid) => {
+  const key = grid.dataset.question;
+  const config = QUESTION_CONFIG[key];
+
+  grid.addEventListener("click", (e) => {
+    const card = e.target.closest(".option-card");
+    if (!card || card.classList.contains("disabled")) return;
+    const value = card.dataset.value;
+
+    if (config.type === "single") {
+      handleSingleSelect(grid, key, card, value);
+    } else {
+      handleMultiSelect(grid, key, card, value);
+    }
+
+    updateNextButton(KEY_TO_PANEL[key]);
+  });
 });
 
-btnTo1.addEventListener("click", () => goToStep(1));
-btnTo3.addEventListener("click", () => {
-  goToStep(3);
+document.getElementById("btn-to-2").addEventListener("click", () => goToStep(2));
+document.getElementById("btn-to-1").addEventListener("click", () => goToStep(1));
+document.getElementById("btn-to-3").addEventListener("click", () => goToStep(3));
+document.getElementById("btn-to-2b").addEventListener("click", () => goToStep(2));
+document.getElementById("btn-to-4").addEventListener("click", () => goToStep(4));
+document.getElementById("btn-to-3b").addEventListener("click", () => goToStep(3));
+document.getElementById("btn-to-5").addEventListener("click", () => {
+  goToStep(5);
   loadDiagnostico();
 });
 
-// ---------- Paso 3: diagnóstico generado con IA ----------
+// ---------- Paso 5: diagnóstico generado con IA ----------
 const aiLoading = document.getElementById("ai-loading");
 const aiResult = document.getElementById("ai-result");
 let currentDiagnostico = null;
@@ -134,14 +264,14 @@ async function loadDiagnostico() {
   aiLoading.classList.remove("hidden");
   aiResult.classList.add("hidden");
 
-  const problemasArr = [...state.problemas];
+  const answers = serializeAnswers();
   let diagnostico;
 
   try {
     const res = await fetch("/api/diagnostico", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ tipoNegocio: state.tipoNegocio, problemas: problemasArr }),
+      body: JSON.stringify(answers),
     });
     if (!res.ok) throw new Error("api error");
     diagnostico = await res.json();
@@ -155,7 +285,7 @@ async function loadDiagnostico() {
     }
   } catch (err) {
     console.warn("Diagnóstico IA no disponible, usando respaldo:", err);
-    diagnostico = fallbackDiagnostico(state.tipoNegocio, problemasArr);
+    diagnostico = fallbackDiagnostico(answers);
   }
 
   currentDiagnostico = diagnostico;
@@ -190,11 +320,18 @@ leadForm.addEventListener("submit", async (e) => {
 
   const nombre = document.getElementById("f-nombre").value.trim();
   const negocio = document.getElementById("f-negocio").value.trim();
+  const distrito = document.getElementById("f-distrito").value.trim();
   const email = document.getElementById("f-email").value.trim();
   const telefono = document.getElementById("f-telefono").value.trim();
+  const autorizacion = leadForm.querySelector('input[name="f-autorizacion"]:checked').value;
 
-  if (!email && !telefono) {
-    leadError.textContent = "Déjanos al menos tu correo o tu WhatsApp para poder enviarte el informe.";
+  if (autorizacion === "whatsapp" && !telefono) {
+    leadError.textContent = "Déjanos tu WhatsApp para poder enviarte el informe.";
+    leadError.classList.remove("hidden");
+    return;
+  }
+  if (autorizacion === "email" && !email) {
+    leadError.textContent = "Déjanos tu correo para poder enviarte el informe.";
     leadError.classList.remove("hidden");
     return;
   }
@@ -208,13 +345,23 @@ leadForm.addEventListener("submit", async (e) => {
     }
   }
 
+  const answers = serializeAnswers();
   const lead = {
     nombre: nombre || null,
     negocio: negocio || null,
+    distrito: distrito || null,
     email: email || null,
     telefono: telefono || null,
-    tipo_negocio: state.tipoNegocio,
-    problemas: [...state.problemas],
+    autorizacion,
+    actividad_principal: answers.actividad,
+    oferta_visitantes: answers.oferta,
+    capacidad_operativa: answers.capacidad,
+    canales_digitales: answers.canales,
+    info_actualizada: answers.infoActualizada,
+    acciones_cliente: answers.accionesCliente,
+    registro_comercial: answers.registro,
+    capacidad_consultas: answers.atencionConsultas,
+    necesidades: answers.necesidades,
     diagnostico_ia: currentDiagnostico,
     fuente: "evento_papa_leon_xiv_2026",
   };

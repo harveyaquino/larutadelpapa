@@ -2,9 +2,9 @@ import Anthropic from "@anthropic-ai/sdk";
 
 const client = new Anthropic();
 
-const SYSTEM_PROMPT = `Eres un consultor de transformación digital en un stand del taller CCLAM Lambayeque, durante la feria por la visita del Papa León XIV a Chiclayo (octubre 2026). Un dueño de una MYPE acaba de responder qué tipo de negocio tiene y qué problemas digitales enfrenta.
+const SYSTEM_PROMPT = `Eres un consultor de transformación digital en un stand del taller CCLAM Lambayeque, durante la feria por la visita del Papa León XIV a Chiclayo (octubre 2026). Un dueño de una MYPE de turismo, hostelería o comercio acaba de responder un diagnóstico de 9 preguntas de opción múltiple sobre su negocio: actividad principal, si tiene una oferta definida para los visitantes del evento, su capacidad operativa, en qué canales digitales aparece, si su información está actualizada, qué puede hacer hoy un cliente por internet (conocer, consultar precio, reservar, pagar...), cómo registra y da seguimiento a sus consultas/pedidos, y si podría atender un pico de consultas.
 
-Escribe un diagnóstico breve, directo y persuasivo en español, con tono cercano y peruano, sin tecnicismos. Debe mostrarle EXACTAMENTE qué oportunidades de venta está perdiendo hoy y qué podría ganar si lo resuelve antes de la llegada de miles de turistas.
+Escribe un diagnóstico breve, directo y persuasivo en español, con tono cercano y peruano, sin tecnicismos. Debe mostrarle EXACTAMENTE qué oportunidades de venta está perdiendo hoy — cruzando varias de sus respuestas, no solo una — y qué podría ganar si lo resuelve antes de la llegada de miles de turistas.
 
 Después de mostrarle lo que está perdiendo, cierra con una nota de ánimo real
 ("recomendacion"): que sienta que esto se resuelve rápido y que no tiene que
@@ -16,21 +16,121 @@ a venta forzada y sin nombrar un producto o servicio específico.
 
 Reglas estrictas:
 - Nunca menciones precios, tarifas, planes, costos ni cifras en soles o dólares.
-- Sé específico sobre SU tipo de negocio y SUS problemas seleccionados, no genérico.
-- El objetivo es generar tanto interés que la persona quiera dejar su correo para recibir el informe completo.
+- Sé específico sobre SU actividad y SUS respuestas, no genérico. Prioriza las brechas más graves (sin presencia digital, información desactualizada, sin forma de vender/reservar/pagar online, sin registro de consultas, sin capacidad de atender un pico de demanda).
+- El objetivo es generar tanto interés que la persona quiera dejar su correo o WhatsApp para recibir el informe completo.
 - Responde ÚNICAMENTE con un objeto JSON válido, sin texto adicional, sin markdown, sin bloques de código.
 
 Formato exacto (respeta las claves):
-{"gancho": "frase corta e impactante, máximo 12 palabras", "parrafo": "2 a 3 frases en tono personal mencionando su tipo de negocio y la oportunidad del evento", "oportunidades": ["3 a 4 oportunidades concretas que está perdiendo, cada una una frase corta, sin precios"], "recomendacion": "1 a 2 frases de ánimo genuino: esto se resuelve rápido y no tiene que hacerlo solo, sin tareas manuales ni mención de precios o productos"}`;
+{"gancho": "frase corta e impactante, máximo 12 palabras", "parrafo": "2 a 3 frases en tono personal mencionando su actividad y la oportunidad del evento", "oportunidades": ["3 a 4 oportunidades concretas que está perdiendo, cada una una frase corta, sin precios"], "recomendacion": "1 a 2 frases de ánimo genuino: esto se resuelve rápido y no tiene que hacerlo solo, sin tareas manuales ni mención de precios o productos"}`;
 
-const VALID_BUSINESS_TYPES = new Set([
-  "Comercio / tienda",
-  "Servicios profesionales",
-  "Restaurante / food",
-  "Producción / manufactura",
-  "Inmobiliaria / construcción",
-  "Otro negocio",
-]);
+const SINGLE_QUESTIONS = {
+  actividad: new Set([
+    "Alojamiento",
+    "Restaurantes y alimentación",
+    "Cafeterías, juguerías y consumo rápido",
+    "Transporte y movilidad",
+    "Agencias y servicios turísticos",
+    "Recreación, cultura y experiencias",
+    "Artesanía y productos locales",
+    "Comercio y servicios al visitante",
+    "Otro",
+  ]),
+  oferta: new Set([
+    "Sí, ya está definido",
+    "Tengo una idea, pero debo desarrollarla",
+    "Todavía no lo he evaluado",
+    "No aplica a mi negocio",
+  ]),
+  capacidad: new Set([
+    "Sí, sin cambios importantes",
+    "Sí, pero necesitaría personal o proveedores",
+    "Sí, pero necesitaría mejorar procesos o tecnología",
+    "No, actualmente estoy al límite",
+    "No lo he evaluado",
+  ]),
+  infoActualizada: new Set([
+    "Sí, completamente",
+    "Parcialmente",
+    "No",
+    "No lo sé",
+    "No tengo presencia digital",
+  ]),
+  registro: new Set([
+    "Sistema comercial, CRM o sistema de reservas",
+    "Excel o Google Sheets",
+    "Agenda o cuaderno",
+    "Todo queda en WhatsApp",
+    "No realizo un registro",
+  ]),
+  atencionConsultas: new Set([
+    "Sí, tengo un proceso definido",
+    "Sí, pero de manera manual",
+    "Tendría dificultades",
+    "Necesitaría una herramienta o sistema",
+    "No lo he evaluado",
+  ]),
+};
+
+const MULTI_QUESTIONS = {
+  canales: new Set([
+    "Página web",
+    "Google Maps",
+    "Facebook o Instagram",
+    "WhatsApp Business",
+    "Plataforma de reservas o ventas",
+    "Ninguno",
+  ]),
+  accionesCliente: new Set([
+    "Conocer mis productos o servicios",
+    "Consultar precios",
+    "Comunicarse por WhatsApp",
+    "Reservar o realizar un pedido",
+    "Pagar",
+    "Solamente puede ver información",
+    "Ninguna",
+  ]),
+  necesidades: new Set([
+    "Diseñar una oferta para visitantes",
+    "Mejorar mi presencia en Google e internet",
+    "Crear o mejorar mi página web",
+    "Implementar catálogo, QR o reservas",
+    "Organizar consultas y seguimiento comercial",
+    "Implementar un sistema comercial o CRM",
+    "Mejorar capacidad, personal o abastecimiento",
+    "Promoción y publicidad",
+    "Medios de pago",
+    "Alianzas con otras empresas",
+    "Otro",
+  ]),
+};
+
+const QUESTION_LABELS = {
+  actividad: "Actividad principal",
+  oferta: "Oferta definida para visitantes",
+  capacidad: "Capacidad operativa ante más clientes",
+  canales: "Canales digitales donde aparece",
+  infoActualizada: "Información actualizada en internet",
+  accionesCliente: "Qué puede hacer un cliente por internet",
+  registro: "Registro y seguimiento comercial",
+  atencionConsultas: "Capacidad de atender un pico de consultas",
+  necesidades: "Necesidades de apoyo señaladas",
+};
+
+function isValidBody(body) {
+  if (!body || typeof body !== "object") return false;
+
+  for (const key of Object.keys(SINGLE_QUESTIONS)) {
+    if (typeof body[key] !== "string" || !SINGLE_QUESTIONS[key].has(body[key])) return false;
+  }
+
+  for (const key of Object.keys(MULTI_QUESTIONS)) {
+    const value = body[key];
+    if (!Array.isArray(value) || value.length === 0) return false;
+    if (!value.every((v) => typeof v === "string" && MULTI_QUESTIONS[key].has(v))) return false;
+  }
+
+  return true;
+}
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -38,20 +138,17 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { tipoNegocio, problemas } = req.body || {};
+  const body = req.body || {};
 
-  if (
-    typeof tipoNegocio !== "string" ||
-    !VALID_BUSINESS_TYPES.has(tipoNegocio) ||
-    !Array.isArray(problemas) ||
-    problemas.length === 0 ||
-    !problemas.every((p) => typeof p === "string")
-  ) {
-    res.status(400).json({ error: "tipoNegocio y problemas son requeridos" });
+  if (!isValidBody(body)) {
+    res.status(400).json({ error: "Respuestas del diagnóstico inválidas o incompletas" });
     return;
   }
 
-  const userMessage = `Tipo de negocio: ${tipoNegocio}\nProblemas digitales seleccionados: ${problemas.join(", ")}`;
+  const userMessage = [
+    ...Object.keys(SINGLE_QUESTIONS).map((key) => `${QUESTION_LABELS[key]}: ${body[key]}`),
+    ...Object.keys(MULTI_QUESTIONS).map((key) => `${QUESTION_LABELS[key]}: ${body[key].join(", ")}`),
+  ].join("\n");
 
   try {
     const response = await client.messages.create({

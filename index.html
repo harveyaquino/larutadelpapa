@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Diagnóstico Digital MYPE — CCLAM Lambayeque × IDE Solution</title>
-  <meta name="description" content="Descubre en 2 minutos qué le falta a tu negocio para vender más durante la visita del Papa León XIV a Chiclayo." />
+  <meta name="description" content="Descubre en 3 minutos qué le falta a tu negocio para vender más durante la visita del Papa León XIV a Chiclayo." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -40,13 +40,13 @@
     <!-- PANTALLA 0: LANDING -->
     <section id="screen-landing">
       <div class="hero">
-        <div class="eyebrow">Diagnóstico gratuito · Solo 2 minutos</div>
+        <div class="eyebrow">Diagnóstico gratuito · Solo 3 minutos</div>
         <h1>¿Está tu negocio preparado para vender más?</h1>
         <p>
           Miles de turistas llegarán a Chiclayo por la visita del Papa León XIV.
-          Responde unas preguntas y una IA analiza al instante qué oportunidades
-          está perdiendo tu negocio hoy — y qué te falta para aprovechar la ola
-          de clientes que se viene.
+          Responde unas preguntas tocando opciones (nada que escribir) y una IA
+          analiza al instante qué oportunidades está perdiendo tu negocio hoy —
+          y qué te falta para aprovechar la ola de clientes que se viene.
         </p>
         <div class="cta-center">
           <button class="btn btn-primary" id="btn-start" style="padding:14px 28px; font-size:1rem;">Empezar mi diagnóstico →</button>
@@ -78,85 +78,175 @@
             <div class="step-dot" data-step="2">2</div>
             <div class="step-line"></div>
             <div class="step-dot" data-step="3">3</div>
+            <div class="step-line"></div>
+            <div class="step-dot" data-step="4">4</div>
+            <div class="step-line"></div>
+            <div class="step-dot" data-step="5">5</div>
           </div>
         </div>
 
         <div class="wizard-body">
 
-          <!-- PASO 1: TIPO DE NEGOCIO -->
+          <!-- PASO 1: TU NEGOCIO -->
           <div class="step-panel" id="panel-1">
-            <div class="step-label">Paso 1 de 2</div>
-            <h3 class="step-title">¿Qué tipo de negocio tienes?</h3>
-            <div class="option-grid" id="business-grid">
-              <div class="option-card" data-value="Comercio / tienda">
-                <span class="icon">🏬</span>
-                <span class="label">Comercio / tienda</span>
-              </div>
-              <div class="option-card" data-value="Servicios profesionales">
-                <span class="icon">💼</span>
-                <span class="label">Servicios profesionales</span>
-              </div>
-              <div class="option-card" data-value="Restaurante / food">
-                <span class="icon">🍽️</span>
-                <span class="label">Restaurante / food</span>
-              </div>
-              <div class="option-card" data-value="Producción / manufactura">
-                <span class="icon">⚙️</span>
-                <span class="label">Producción / manufactura</span>
-              </div>
-              <div class="option-card" data-value="Inmobiliaria / construcción">
-                <span class="icon">🏠</span>
-                <span class="label">Inmobiliaria / construcción</span>
-              </div>
-              <div class="option-card" data-value="Otro negocio">
-                <span class="icon">✨</span>
-                <span class="label">Otro negocio</span>
+            <div class="step-label">Paso 1 de 4</div>
+            <h3 class="step-title">Tu negocio</h3>
+
+            <div class="sub-question">
+              <h4 class="sub-title">¿Cuál es la actividad principal de su negocio?</h4>
+              <div class="option-grid" data-question="actividad">
+                <div class="option-card radio-card" data-value="Alojamiento"><span class="check"></span><span class="label">Alojamiento</span></div>
+                <div class="option-card radio-card" data-value="Restaurantes y alimentación"><span class="check"></span><span class="label">Restaurantes y alimentación</span></div>
+                <div class="option-card radio-card" data-value="Cafeterías, juguerías y consumo rápido"><span class="check"></span><span class="label">Cafeterías, juguerías y consumo rápido</span></div>
+                <div class="option-card radio-card" data-value="Transporte y movilidad"><span class="check"></span><span class="label">Transporte y movilidad</span></div>
+                <div class="option-card radio-card" data-value="Agencias y servicios turísticos"><span class="check"></span><span class="label">Agencias y servicios turísticos</span></div>
+                <div class="option-card radio-card" data-value="Recreación, cultura y experiencias"><span class="check"></span><span class="label">Recreación, cultura y experiencias</span></div>
+                <div class="option-card radio-card" data-value="Artesanía y productos locales"><span class="check"></span><span class="label">Artesanía y productos locales</span></div>
+                <div class="option-card radio-card" data-value="Comercio y servicios al visitante"><span class="check"></span><span class="label">Comercio y servicios al visitante</span></div>
+                <div class="option-card radio-card" data-value="Otro"><span class="check"></span><span class="label">Otro</span></div>
               </div>
             </div>
+
+            <div class="sub-question">
+              <h4 class="sub-title">¿Ha definido qué producto o servicio podría ofrecer ante la visita del Papa?</h4>
+              <div class="option-grid" data-question="oferta">
+                <div class="option-card radio-card" data-value="Sí, ya está definido"><span class="check"></span><span class="label">Sí, ya está definido</span></div>
+                <div class="option-card radio-card" data-value="Tengo una idea, pero debo desarrollarla"><span class="check"></span><span class="label">Tengo una idea, pero debo desarrollarla</span></div>
+                <div class="option-card radio-card" data-value="Todavía no lo he evaluado"><span class="check"></span><span class="label">Todavía no lo he evaluado</span></div>
+                <div class="option-card radio-card" data-value="No aplica a mi negocio"><span class="check"></span><span class="label">No aplica a mi negocio</span></div>
+              </div>
+            </div>
+
+            <div class="sub-question">
+              <h4 class="sub-title">Si aumentara la cantidad de clientes, ¿su negocio podría atenderlos?</h4>
+              <div class="option-grid" data-question="capacidad">
+                <div class="option-card radio-card" data-value="Sí, sin cambios importantes"><span class="check"></span><span class="label">Sí, sin cambios importantes</span></div>
+                <div class="option-card radio-card" data-value="Sí, pero necesitaría personal o proveedores"><span class="check"></span><span class="label">Sí, pero necesitaría personal o proveedores</span></div>
+                <div class="option-card radio-card" data-value="Sí, pero necesitaría mejorar procesos o tecnología"><span class="check"></span><span class="label">Sí, pero necesitaría mejorar procesos o tecnología</span></div>
+                <div class="option-card radio-card" data-value="No, actualmente estoy al límite"><span class="check"></span><span class="label">No, actualmente estoy al límite</span></div>
+                <div class="option-card radio-card" data-value="No lo he evaluado"><span class="check"></span><span class="label">No lo he evaluado</span></div>
+              </div>
+            </div>
+
             <div class="btn-row">
               <span></span>
               <button class="btn btn-primary" id="btn-to-2" disabled>Siguiente →</button>
             </div>
           </div>
 
-          <!-- PASO 2: PROBLEMAS DIGITALES -->
+          <!-- PASO 2: PRESENCIA DIGITAL -->
           <div class="step-panel hidden" id="panel-2">
-            <div class="step-label">Paso 2 de 2</div>
-            <h3 class="step-title">¿Cuáles son tus principales problemas digitales?</h3>
-            <div class="option-grid" id="problems-grid">
-              <div class="option-card problem-card" data-value="No tengo web ni presencia online">
-                <span class="check"></span><span class="label">No tengo web ni presencia online</span>
-              </div>
-              <div class="option-card problem-card" data-value="Pierdo clientes que no regresan">
-                <span class="check"></span><span class="label">Pierdo clientes que no regresan</span>
-              </div>
-              <div class="option-card problem-card" data-value="No llevo control de mis ventas">
-                <span class="check"></span><span class="label">No llevo control de mis ventas</span>
-              </div>
-              <div class="option-card problem-card" data-value="No sé qué tengo en stock">
-                <span class="check"></span><span class="label">No sé qué tengo en stock</span>
-              </div>
-              <div class="option-card problem-card" data-value="No emito comprobantes electrónicos">
-                <span class="check"></span><span class="label">No emito comprobantes electrónicos</span>
-              </div>
-              <div class="option-card problem-card" data-value="Gestiono todo por WhatsApp sin orden">
-                <span class="check"></span><span class="label">Gestiono todo por WhatsApp sin orden</span>
-              </div>
-              <div class="option-card problem-card" data-value="Mi equipo no tiene herramientas">
-                <span class="check"></span><span class="label">Mi equipo no tiene herramientas</span>
-              </div>
-              <div class="option-card problem-card" data-value="No tengo data ni reportes">
-                <span class="check"></span><span class="label">No tengo data ni reportes</span>
+            <div class="step-label">Paso 2 de 4</div>
+            <h3 class="step-title">Presencia digital</h3>
+
+            <div class="sub-question">
+              <h4 class="sub-title">¿En cuáles de estos canales aparece actualmente su negocio?</h4>
+              <p class="sub-hint">Puede marcar varias opciones.</p>
+              <div class="option-grid" data-question="canales" data-exclusive="Ninguno">
+                <div class="option-card problem-card" data-value="Página web"><span class="check"></span><span class="label">Página web</span></div>
+                <div class="option-card problem-card" data-value="Google Maps"><span class="check"></span><span class="label">Google Maps</span></div>
+                <div class="option-card problem-card" data-value="Facebook o Instagram"><span class="check"></span><span class="label">Facebook o Instagram</span></div>
+                <div class="option-card problem-card" data-value="WhatsApp Business"><span class="check"></span><span class="label">WhatsApp Business</span></div>
+                <div class="option-card problem-card" data-value="Plataforma de reservas o ventas"><span class="check"></span><span class="label">Plataforma de reservas o ventas</span></div>
+                <div class="option-card problem-card" data-value="Ninguno"><span class="check"></span><span class="label">Ninguno</span></div>
               </div>
             </div>
+
+            <div class="sub-question">
+              <h4 class="sub-title">¿Su dirección, horario, teléfono, fotografías y servicios están actualizados en internet?</h4>
+              <div class="option-grid" data-question="infoActualizada">
+                <div class="option-card radio-card" data-value="Sí, completamente"><span class="check"></span><span class="label">Sí, completamente</span></div>
+                <div class="option-card radio-card" data-value="Parcialmente"><span class="check"></span><span class="label">Parcialmente</span></div>
+                <div class="option-card radio-card" data-value="No"><span class="check"></span><span class="label">No</span></div>
+                <div class="option-card radio-card" data-value="No lo sé"><span class="check"></span><span class="label">No lo sé</span></div>
+                <div class="option-card radio-card" data-value="No tengo presencia digital"><span class="check"></span><span class="label">No tengo presencia digital</span></div>
+              </div>
+            </div>
+
+            <div class="sub-question">
+              <h4 class="sub-title">Actualmente, ¿qué puede hacer un cliente por internet?</h4>
+              <p class="sub-hint">Puede marcar varias opciones.</p>
+              <div class="option-grid" data-question="accionesCliente" data-exclusive="Ninguna">
+                <div class="option-card problem-card" data-value="Conocer mis productos o servicios"><span class="check"></span><span class="label">Conocer mis productos o servicios</span></div>
+                <div class="option-card problem-card" data-value="Consultar precios"><span class="check"></span><span class="label">Consultar precios</span></div>
+                <div class="option-card problem-card" data-value="Comunicarse por WhatsApp"><span class="check"></span><span class="label">Comunicarse por WhatsApp</span></div>
+                <div class="option-card problem-card" data-value="Reservar o realizar un pedido"><span class="check"></span><span class="label">Reservar o realizar un pedido</span></div>
+                <div class="option-card problem-card" data-value="Pagar"><span class="check"></span><span class="label">Pagar</span></div>
+                <div class="option-card problem-card" data-value="Solamente puede ver información"><span class="check"></span><span class="label">Solamente puede ver información</span></div>
+                <div class="option-card problem-card" data-value="Ninguna"><span class="check"></span><span class="label">Ninguna</span></div>
+              </div>
+            </div>
+
             <div class="btn-row">
               <button class="btn btn-ghost" id="btn-to-1">← Atrás</button>
-              <button class="btn btn-primary" id="btn-to-3" disabled>Ver mi diagnóstico →</button>
+              <button class="btn btn-primary" id="btn-to-3" disabled>Siguiente →</button>
             </div>
           </div>
 
-          <!-- PASO 3: RESULTADO (IA) + CONTACTO OPCIONAL -->
+          <!-- PASO 3: GESTIÓN COMERCIAL -->
           <div class="step-panel hidden" id="panel-3">
+            <div class="step-label">Paso 3 de 4</div>
+            <h3 class="step-title">Gestión comercial</h3>
+
+            <div class="sub-question">
+              <h4 class="sub-title">¿Cómo registra y realiza seguimiento a consultas, pedidos o reservas?</h4>
+              <div class="option-grid" data-question="registro">
+                <div class="option-card radio-card" data-value="Sistema comercial, CRM o sistema de reservas"><span class="check"></span><span class="label">Sistema comercial, CRM o sistema de reservas</span></div>
+                <div class="option-card radio-card" data-value="Excel o Google Sheets"><span class="check"></span><span class="label">Excel o Google Sheets</span></div>
+                <div class="option-card radio-card" data-value="Agenda o cuaderno"><span class="check"></span><span class="label">Agenda o cuaderno</span></div>
+                <div class="option-card radio-card" data-value="Todo queda en WhatsApp"><span class="check"></span><span class="label">Todo queda en WhatsApp</span></div>
+                <div class="option-card radio-card" data-value="No realizo un registro"><span class="check"></span><span class="label">No realizo un registro</span></div>
+              </div>
+            </div>
+
+            <div class="sub-question">
+              <h4 class="sub-title">Si recibiera muchas consultas al mismo tiempo, ¿podría atenderlas y darles seguimiento?</h4>
+              <div class="option-grid" data-question="atencionConsultas">
+                <div class="option-card radio-card" data-value="Sí, tengo un proceso definido"><span class="check"></span><span class="label">Sí, tengo un proceso definido</span></div>
+                <div class="option-card radio-card" data-value="Sí, pero de manera manual"><span class="check"></span><span class="label">Sí, pero de manera manual</span></div>
+                <div class="option-card radio-card" data-value="Tendría dificultades"><span class="check"></span><span class="label">Tendría dificultades</span></div>
+                <div class="option-card radio-card" data-value="Necesitaría una herramienta o sistema"><span class="check"></span><span class="label">Necesitaría una herramienta o sistema</span></div>
+                <div class="option-card radio-card" data-value="No lo he evaluado"><span class="check"></span><span class="label">No lo he evaluado</span></div>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn btn-ghost" id="btn-to-2b">← Atrás</button>
+              <button class="btn btn-primary" id="btn-to-4" disabled>Siguiente →</button>
+            </div>
+          </div>
+
+          <!-- PASO 4: NECESIDADES -->
+          <div class="step-panel hidden" id="panel-4">
+            <div class="step-label">Paso 4 de 4</div>
+            <h3 class="step-title">Necesidades principales</h3>
+
+            <div class="sub-question">
+              <h4 class="sub-title">¿En qué aspectos necesitaría apoyo?</h4>
+              <p class="sub-hint">Seleccione hasta tres.</p>
+              <div class="option-grid" data-question="necesidades" data-max="3">
+                <div class="option-card problem-card" data-value="Diseñar una oferta para visitantes"><span class="check"></span><span class="label">Diseñar una oferta para visitantes</span></div>
+                <div class="option-card problem-card" data-value="Mejorar mi presencia en Google e internet"><span class="check"></span><span class="label">Mejorar mi presencia en Google e internet</span></div>
+                <div class="option-card problem-card" data-value="Crear o mejorar mi página web"><span class="check"></span><span class="label">Crear o mejorar mi página web</span></div>
+                <div class="option-card problem-card" data-value="Implementar catálogo, QR o reservas"><span class="check"></span><span class="label">Implementar catálogo, QR o reservas</span></div>
+                <div class="option-card problem-card" data-value="Organizar consultas y seguimiento comercial"><span class="check"></span><span class="label">Organizar consultas y seguimiento comercial</span></div>
+                <div class="option-card problem-card" data-value="Implementar un sistema comercial o CRM"><span class="check"></span><span class="label">Implementar un sistema comercial o CRM</span></div>
+                <div class="option-card problem-card" data-value="Mejorar capacidad, personal o abastecimiento"><span class="check"></span><span class="label">Mejorar capacidad, personal o abastecimiento</span></div>
+                <div class="option-card problem-card" data-value="Promoción y publicidad"><span class="check"></span><span class="label">Promoción y publicidad</span></div>
+                <div class="option-card problem-card" data-value="Medios de pago"><span class="check"></span><span class="label">Medios de pago</span></div>
+                <div class="option-card problem-card" data-value="Alianzas con otras empresas"><span class="check"></span><span class="label">Alianzas con otras empresas</span></div>
+                <div class="option-card problem-card" data-value="Otro"><span class="check"></span><span class="label">Otro</span></div>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn btn-ghost" id="btn-to-3b">← Atrás</button>
+              <button class="btn btn-primary" id="btn-to-5" disabled>Ver mi diagnóstico →</button>
+            </div>
+          </div>
+
+          <!-- PASO 5: RESULTADO (IA) + CONTACTO OPCIONAL -->
+          <div class="step-panel hidden" id="panel-5">
             <div class="step-label">Resultado</div>
             <h3 class="step-title">Tu diagnóstico digital personalizado</h3>
 
@@ -194,16 +284,29 @@
                       <input type="text" id="f-nombre" autocomplete="name" />
                     </div>
                     <div class="field">
-                      <label for="f-negocio">Nombre de tu negocio</label>
+                      <label for="f-negocio">Nombre de la empresa</label>
                       <input type="text" id="f-negocio" autocomplete="organization" />
+                    </div>
+                    <div class="field full">
+                      <label for="f-distrito">Distrito o localidad</label>
+                      <input type="text" id="f-distrito" autocomplete="address-level2" />
                     </div>
                     <div class="field full">
                       <label for="f-email">Correo electrónico</label>
                       <input type="email" id="f-email" autocomplete="email" placeholder="tucorreo@ejemplo.com" />
                     </div>
                     <div class="field full">
-                      <label for="f-telefono">WhatsApp / Celular (opcional)</label>
+                      <label for="f-telefono">WhatsApp / Celular</label>
                       <input type="tel" id="f-telefono" autocomplete="tel" />
+                    </div>
+                  </div>
+
+                  <div class="field full">
+                    <label>¿Desea recibir el resultado del diagnóstico y recomendaciones para su negocio?</label>
+                    <div class="radio-group">
+                      <label class="radio-option"><input type="radio" name="f-autorizacion" value="whatsapp" /> Sí, por WhatsApp</label>
+                      <label class="radio-option"><input type="radio" name="f-autorizacion" value="email" /> Sí, por correo electrónico</label>
+                      <label class="radio-option"><input type="radio" name="f-autorizacion" value="no" checked /> No</label>
                     </div>
                   </div>
 

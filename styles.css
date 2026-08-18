@@ -333,6 +333,70 @@ main {
   border-color: transparent;
 }
 
+.option-card.radio-card {
+  flex-direction: row;
+  text-align: left;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 14px 16px;
+}
+
+.option-card.radio-card .check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #c6cede;
+  flex-shrink: 0;
+}
+
+.option-card.radio-card.selected .check {
+  background: var(--gradient);
+  border-color: transparent;
+}
+
+.option-card.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.sub-question { margin-bottom: 26px; }
+.sub-question:last-child { margin-bottom: 0; }
+.sub-question .option-grid { margin-bottom: 0; }
+
+.sub-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--heading);
+  margin: 0 0 12px;
+}
+
+.sub-hint {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: -8px 0 12px;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--heading);
+}
+
+.radio-option input { accent-color: var(--blue-dark); }
+
 /* Buttons */
 .btn-row {
   display: flex;

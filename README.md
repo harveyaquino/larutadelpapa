@@ -1,10 +1,15 @@
 # Diagnóstico Digital MYPE — CCLAM Lambayeque × IDE Solution
 
-Landing + cuestionario de 2 pasos, pensado para escanear por QR en el taller
-de la visita del Papa León XIV en Chiclayo. Al terminar, una IA (Claude)
-genera al instante un **diagnóstico personalizado (sin precios)** de las
-oportunidades que el negocio está perdiendo, para generar interés real. Dejar
-el correo para recibir el informe completo es **opcional**. El look and feel
+Landing + cuestionario "Empresa Lista" de 9 preguntas de opción múltiple
+(agrupadas en 4 pantallas temáticas), pensado para escanear por QR en el
+taller de la visita del Papa León XIV en Chiclayo. Cubre actividad del
+negocio, oferta para visitantes, capacidad operativa, presencia digital,
+información actualizada, qué puede hacer un cliente por internet, registro
+comercial, capacidad de atención y necesidades de apoyo. Al terminar, una IA
+(Claude) genera al instante un **diagnóstico personalizado (sin precios)** de
+las oportunidades que el negocio está perdiendo, para generar interés real.
+Dejar los datos de contacto para recibir el informe completo es **opcional**.
+El look and feel
 está tomado de [ide-solution.com](https://www.ide-solution.com/) (mismos
 colores, tipografía y logo), es 100% responsive, y tiene un botón flotante de
 WhatsApp al costado que abre un chat directo con IDE Solution.
@@ -101,28 +106,35 @@ URL con cualquier generador de QR e imprímelo para el stand del taller.
 
 ## 7. Ver los contactos capturados
 
-En Supabase → **Table Editor → leads** verás cada registro: nombre (opcional),
-negocio, email/teléfono (al menos uno), tipo de negocio, problemas marcados y
-el diagnóstico que generó la IA para esa persona (columna `diagnostico_ia`).
-Desde ahí puedes exportarlos a CSV para tu equipo comercial.
+En Supabase → **Table Editor → leads** verás cada registro: datos de
+inscripción (nombre, negocio, distrito, email/teléfono, autorización — todos
+opcionales salvo que la persona haya autorizado recibir el resultado, en cuyo
+caso se exige el canal elegido), las 9 respuestas del diagnóstico
+(`actividad_principal`, `oferta_visitantes`, `capacidad_operativa`,
+`canales_digitales`, `info_actualizada`, `acciones_cliente`,
+`registro_comercial`, `capacidad_consultas`, `necesidades`) y el diagnóstico
+que generó la IA para esa persona (columna `diagnostico_ia`). Desde ahí puedes
+exportarlos a CSV para tu equipo comercial.
 
 ## Estructura del proyecto
 
 ```
 web/
-├── index.html              landing + wizard (3 pantallas) + botón WhatsApp
+├── index.html              landing + wizard (5 pantallas: 4 de preguntas + resultado) + botón WhatsApp
 ├── styles.css                estilos con la identidad de ide-solution.com
 ├── app.js                     lógica del wizard + llamada a /api/diagnostico + Supabase
 ├── package.json                dependencia del SDK de Anthropic
 ├── api/diagnostico.js         función serverless: genera el diagnóstico con Claude
 ├── api/config.js               función serverless: sirve SUPABASE_URL / SUPABASE_ANON_KEY al navegador
-└── supabase/schema.sql        script SQL para crear la tabla `leads`
+├── supabase/schema.sql        script SQL para crear la tabla `leads`
+└── supabase/migration_*.sql   migraciones para instalaciones que ya tenían la tabla creada
 ```
 
 ## Cómo editar el contenido
 
 - **Prompt de la IA** (tono, reglas, qué debe destacar): `api/diagnostico.js` → `SYSTEM_PROMPT`.
-- **Diagnóstico de respaldo** (si la IA falla o no hay clave configurada): `app.js` → `PROBLEM_INSIGHTS` / `BUSINESS_CONTEXT`.
+- **Preguntas y opciones**: `index.html` (cada pregunta es un `.option-grid` con `data-question`) + los mapas de validación en `api/diagnostico.js` (`SINGLE_QUESTIONS` / `MULTI_QUESTIONS`).
+- **Diagnóstico de respaldo** (si la IA falla o no hay clave configurada): `app.js` → `INSIGHT_RULES` / `BUSINESS_CONTEXT`.
 - **Número de WhatsApp**: `index.html` → busca `wa.me/51964484382` (es el número público de IDE Solution).
 
 En ningún punto del flujo se muestra un precio — ni en el diagnóstico de la
