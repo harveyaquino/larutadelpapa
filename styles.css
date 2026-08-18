@@ -501,6 +501,31 @@ main {
   font-weight: 500;
 }
 
+.recomendacion-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #f0faf5;
+  border: 1.5px solid #bfe8d4;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 24px;
+}
+
+.recomendacion-box .reco-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.recomendacion-box p {
+  margin: 0;
+  color: #0f5132;
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
 /* Lead capture (optional email) */
 .lead-box {
   background: var(--bg-soft);

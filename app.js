@@ -44,6 +44,8 @@ function fallbackDiagnostico(tipoNegocio, problemas) {
     oportunidades: [...problemas]
       .slice(0, 4)
       .map((p) => PROBLEM_INSIGHTS[p] || p),
+    recomendacion:
+      "La buena noticia: esto se ordena rápido y no tienes que resolverlo solo. Con el acompañamiento correcto, en poco tiempo puedes llegar a la visita del Papa con tu negocio listo para vender más.",
   };
 }
 
@@ -143,7 +145,12 @@ async function loadDiagnostico() {
     });
     if (!res.ok) throw new Error("api error");
     diagnostico = await res.json();
-    if (!diagnostico.gancho || !diagnostico.parrafo || !Array.isArray(diagnostico.oportunidades)) {
+    if (
+      !diagnostico.gancho ||
+      !diagnostico.parrafo ||
+      !Array.isArray(diagnostico.oportunidades) ||
+      !diagnostico.recomendacion
+    ) {
       throw new Error("formato inesperado");
     }
   } catch (err) {
@@ -166,6 +173,8 @@ function renderDiagnostico(diagnostico) {
   list.innerHTML = diagnostico.oportunidades
     .map((o) => `<div class="gap-item">${o}</div>`)
     .join("");
+
+  document.getElementById("res-recomendacion").textContent = diagnostico.recomendacion;
 }
 
 // ---------- Formulario de contacto (opcional) ----------
