@@ -2,64 +2,50 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const supabase = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
 
-// ---------- Contenido del diagnóstico (sin precios) ----------
+// ---------- Contenido de respaldo (si la IA falla o no hay API key) ----------
 const PROBLEM_INSIGHTS = {
-  "No tengo web ni presencia online": {
-    titulo: "Tu cliente te busca en Google y encuentra a la competencia",
-    detalle:
-      "Sin presencia digital, un turista o vecino que busca tu rubro en Google o Google Maps simplemente no te encuentra. Estás fuera del radar justo cuando más gente nueva llega a Chiclayo.",
-  },
-  "Pierdo clientes que no regresan": {
-    titulo: "Se van y no hay forma de recontactarlos",
-    detalle:
-      "El cliente te ve, le gusta, lo piensa y se pierde entre cientos de negocios. Sin un canal para recontactarlo (WhatsApp, web, QR), esa venta futura se queda en el camino.",
-  },
-  "No llevo control de mis ventas": {
-    titulo: "Estás vendiendo a ciegas",
-    detalle:
-      "No saber qué vendiste, qué te queda o cuál es tu producto estrella te impide tomar decisiones. Cada día sin ese control es una oportunidad de mejora que se pierde.",
-  },
-  "No sé qué tengo en stock": {
-    titulo: "Riesgo de quedarte sin lo que más se vende",
-    detalle:
-      "Sin control de inventario, corres el riesgo de quedarte sin stock de tu producto más pedido justo en los días de mayor demanda, o de comprar de más lo que no rota.",
-  },
-  "No emito comprobantes electrónicos": {
-    titulo: "Un tema normativo que ya no es opcional",
-    detalle:
-      "Desde 2026 la facturación electrónica deja de ser opcional para más MYPEs. No tenerla lista a tiempo puede generarte multas y problemas con tus proveedores y clientes formales.",
-  },
-  "Gestiono todo por WhatsApp sin orden": {
-    titulo: "Pedidos y clientes se pierden en el chat",
-    detalle:
-      "WhatsApp es un gran canal de venta, pero sin un sistema detrás, los pedidos se mezclan, se olvidan seguimientos y pierdes tiempo buscando conversaciones antiguas.",
-  },
-  "Mi equipo no tiene herramientas": {
-    titulo: "Tu equipo pierde horas en tareas manuales",
-    detalle:
-      "Sin herramientas digitales básicas, tareas que podrían tomar minutos (registrar una venta, responder un pedido, armar un reporte) le toman horas a tu equipo cada semana.",
-  },
-  "No tengo data ni reportes": {
-    titulo: "Decisiones a ciegas, sin datos reales",
-    detalle:
-      "Sin reportes ni data de tu negocio, decides por intuición. No sabes qué producto o servicio realmente te da más ganancia, ni en qué días vendes más.",
-  },
+  "No tengo web ni presencia online":
+    "Tu cliente te busca en Google y encuentra a la competencia: un turista o vecino que busca tu rubro simplemente no te encuentra.",
+  "Pierdo clientes que no regresan":
+    "El cliente te ve, le gusta, lo piensa y se pierde entre cientos de negocios. Sin forma de recontactarlo, esa venta futura se queda en el camino.",
+  "No llevo control de mis ventas":
+    "Estás vendiendo a ciegas: no saber qué vendiste, qué te queda o cuál es tu producto estrella te impide tomar decisiones.",
+  "No sé qué tengo en stock":
+    "Riesgo de quedarte sin lo que más se vende justo en los días de mayor demanda, o de comprar de más lo que no rota.",
+  "No emito comprobantes electrónicos":
+    "Desde 2026 la facturación electrónica deja de ser opcional para más MYPEs. No tenerla lista a tiempo puede traerte problemas normativos.",
+  "Gestiono todo por WhatsApp sin orden":
+    "Pedidos y clientes se pierden en el chat: se mezclan conversaciones, se olvidan seguimientos y se pierde tiempo cada semana.",
+  "Mi equipo no tiene herramientas":
+    "Tu equipo pierde horas en tareas manuales que podrían tomar minutos con las herramientas correctas.",
+  "No tengo data ni reportes":
+    "Decides a ciegas: sin reportes no sabes qué producto o servicio realmente te da más ganancia.",
 };
 
 const BUSINESS_CONTEXT = {
   "Comercio / tienda":
-    "Con miles de turistas caminando por Chiclayo, tu tienda puede captar clientes nuevos que hoy pasan de largo por no saber que existes.",
+    "con miles de turistas caminando por Chiclayo, tu tienda puede captar clientes nuevos que hoy pasan de largo por no saber que existes.",
   "Servicios profesionales":
-    "Cada vez más personas buscan servicios profesionales recomendados en internet antes de llamar. Si no te encuentran ahí, pierdes la primera impresión.",
+    "cada vez más personas buscan servicios profesionales recomendados en internet antes de llamar. Si no te encuentran ahí, pierdes la primera impresión.",
   "Restaurante / food":
-    "Los turistas eligen dónde comer buscando en Google Maps y redes sociales minutos antes de llegar. Un restaurante sin presencia digital pierde esas mesas.",
+    "los turistas eligen dónde comer buscando en Google Maps minutos antes de llegar. Un restaurante sin presencia digital pierde esas mesas.",
   "Producción / manufactura":
-    "La demanda extra del evento es una oportunidad para vender más volumen, pero sin control de stock y ventas es difícil responder a tiempo.",
+    "la demanda extra del evento es una oportunidad para vender más volumen, pero sin control de stock y ventas es difícil responder a tiempo.",
   "Inmobiliaria / construcción":
-    "La visita del Papa puede traer más movimiento e interés en la zona. Sin presencia digital y seguimiento ordenado de contactos, esas oportunidades se enfrían.",
+    "la visita del Papa puede traer más movimiento e interés en la zona. Sin seguimiento ordenado de contactos, esas oportunidades se enfrían.",
   "Otro negocio":
-    "La ola de visitantes que trae este evento es una oportunidad puntual. Aprovecharla depende de qué tan lista está la parte digital de tu negocio.",
+    "la ola de visitantes que trae este evento es una oportunidad puntual, y aprovecharla depende de qué tan lista está la parte digital de tu negocio.",
 };
+
+function fallbackDiagnostico(tipoNegocio, problemas) {
+  return {
+    gancho: "Estás dejando ventas sobre la mesa",
+    parrafo: `Como negocio de ${tipoNegocio.toLowerCase()}, ${BUSINESS_CONTEXT[tipoNegocio] || "hay una oportunidad puntual en este evento que depende de qué tan lista está la parte digital de tu negocio."}`,
+    oportunidades: [...problemas]
+      .slice(0, 4)
+      .map((p) => PROBLEM_INSIGHTS[p] || p),
+  };
+}
 
 // ---------- Estado ----------
 const state = {
@@ -68,14 +54,13 @@ const state = {
   problemas: new Set(),
 };
 
-// ---------- Helpers de navegación ----------
+// ---------- Navegación ----------
 const screenLanding = document.getElementById("screen-landing");
 const screenWizard = document.getElementById("screen-wizard");
 const panels = {
   1: document.getElementById("panel-1"),
   2: document.getElementById("panel-2"),
   3: document.getElementById("panel-3"),
-  4: document.getElementById("panel-4"),
 };
 const stepDots = document.querySelectorAll(".step-dot");
 
@@ -133,62 +118,95 @@ problemsGrid.addEventListener("click", (e) => {
 });
 
 btnTo1.addEventListener("click", () => goToStep(1));
-btnTo3.addEventListener("click", () => goToStep(3));
-document.getElementById("btn-to-2b").addEventListener("click", () => goToStep(2));
+btnTo3.addEventListener("click", () => {
+  goToStep(3);
+  loadDiagnostico();
+});
 
-// ---------- Paso 3: formulario de contacto ----------
-const form = document.getElementById("lead-form");
-const formError = document.getElementById("form-error");
+// ---------- Paso 3: diagnóstico generado con IA ----------
+const aiLoading = document.getElementById("ai-loading");
+const aiResult = document.getElementById("ai-result");
+let currentDiagnostico = null;
+
+async function loadDiagnostico() {
+  aiLoading.classList.remove("hidden");
+  aiResult.classList.add("hidden");
+
+  const problemasArr = [...state.problemas];
+  let diagnostico;
+
+  try {
+    const res = await fetch("/api/diagnostico", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tipoNegocio: state.tipoNegocio, problemas: problemasArr }),
+    });
+    if (!res.ok) throw new Error("api error");
+    diagnostico = await res.json();
+    if (!diagnostico.gancho || !diagnostico.parrafo || !Array.isArray(diagnostico.oportunidades)) {
+      throw new Error("formato inesperado");
+    }
+  } catch (err) {
+    console.warn("Diagnóstico IA no disponible, usando respaldo:", err);
+    diagnostico = fallbackDiagnostico(state.tipoNegocio, problemasArr);
+  }
+
+  currentDiagnostico = diagnostico;
+  renderDiagnostico(diagnostico);
+
+  aiLoading.classList.add("hidden");
+  aiResult.classList.remove("hidden");
+}
+
+function renderDiagnostico(diagnostico) {
+  document.getElementById("res-gancho").textContent = diagnostico.gancho;
+  document.getElementById("res-parrafo").textContent = diagnostico.parrafo;
+
+  const list = document.getElementById("res-oportunidades");
+  list.innerHTML = diagnostico.oportunidades
+    .map((o) => `<div class="gap-item">${o}</div>`)
+    .join("");
+}
+
+// ---------- Formulario de contacto (opcional) ----------
+const leadForm = document.getElementById("lead-form");
+const leadError = document.getElementById("lead-error");
+const leadBoxForm = leadForm;
+const leadSuccess = document.getElementById("lead-success");
 const btnSubmit = document.getElementById("btn-submit");
 
-function fieldErr(id, msg) {
-  const field = document.getElementById(id).closest(".field");
-  field.querySelector(".err").textContent = msg || "";
-}
+leadForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  leadError.classList.add("hidden");
 
-function validateForm() {
-  let ok = true;
   const nombre = document.getElementById("f-nombre").value.trim();
+  const negocio = document.getElementById("f-negocio").value.trim();
   const email = document.getElementById("f-email").value.trim();
   const telefono = document.getElementById("f-telefono").value.trim();
-  const consent = document.getElementById("f-consent").checked;
 
-  fieldErr("f-nombre", "");
-  fieldErr("f-email", "");
-  fieldErr("f-telefono", "");
-
-  if (!nombre) { fieldErr("f-nombre", "Ingresa tu nombre"); ok = false; }
-
-  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRe.test(email)) { fieldErr("f-email", "Ingresa un correo válido"); ok = false; }
-
-  const phoneDigits = telefono.replace(/\D/g, "");
-  if (phoneDigits.length < 7) { fieldErr("f-telefono", "Ingresa un número válido"); ok = false; }
-
-  if (!consent) { ok = false; }
-
-  return ok;
-}
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  formError.classList.add("hidden");
-
-  if (!validateForm()) return;
-  if (!state.tipoNegocio || state.problemas.size === 0) {
-    formError.textContent = "Falta completar los pasos anteriores.";
-    formError.classList.remove("hidden");
+  if (!email && !telefono) {
+    leadError.textContent = "Déjanos al menos tu correo o tu WhatsApp para poder enviarte el informe.";
+    leadError.classList.remove("hidden");
     return;
   }
 
+  if (email) {
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRe.test(email)) {
+      leadError.textContent = "Ingresa un correo válido.";
+      leadError.classList.remove("hidden");
+      return;
+    }
+  }
+
   const lead = {
-    nombre: document.getElementById("f-nombre").value.trim(),
-    negocio: document.getElementById("f-negocio").value.trim() || null,
-    email: document.getElementById("f-email").value.trim(),
-    telefono: document.getElementById("f-telefono").value.trim(),
+    nombre: nombre || null,
+    negocio: negocio || null,
+    email: email || null,
+    telefono: telefono || null,
     tipo_negocio: state.tipoNegocio,
     problemas: [...state.problemas],
-    nivel_digitalizacion: computeLevel(state.problemas.size),
+    diagnostico_ia: currentDiagnostico,
     fuente: "evento_papa_leon_xiv_2026",
   };
 
@@ -198,79 +216,14 @@ form.addEventListener("submit", async (e) => {
   try {
     const { error } = await supabase.from("leads").insert(lead);
     if (error) throw error;
-    renderResult();
-    goToStep(4);
+    leadBoxForm.classList.add("hidden");
+    leadSuccess.classList.remove("hidden");
   } catch (err) {
     console.error(err);
-    formError.textContent =
-      "No pudimos guardar tus datos. Revisa tu conexión e inténtalo de nuevo.";
-    formError.classList.remove("hidden");
+    leadError.textContent = "No pudimos guardar tus datos. Revisa tu conexión e inténtalo de nuevo.";
+    leadError.classList.remove("hidden");
   } finally {
     btnSubmit.disabled = false;
-    btnSubmit.textContent = "Ver mi diagnóstico →";
+    btnSubmit.textContent = "Enviarme el informe completo →";
   }
 });
-
-// ---------- Paso 4: resultado ----------
-function computeLevel(count) {
-  if (count >= 6) return "Inicial";
-  if (count >= 3) return "Básico";
-  return "Intermedio";
-}
-
-const LEVEL_COPY = {
-  Inicial: {
-    label: "Nivel de digitalización: Inicial",
-    desc: "Tu negocio todavía depende casi por completo de procesos manuales. Es el momento con más margen de mejora antes de la llegada de turistas.",
-  },
-  Básico: {
-    label: "Nivel de digitalización: Básico",
-    desc: "Ya tienes algunas bases, pero hay brechas importantes que te están haciendo perder ventas y clientes que no vuelven.",
-  },
-  Intermedio: {
-    label: "Nivel de digitalización: Intermedio",
-    desc: "Vas por buen camino. Cerrando estos últimos puntos puedes aprovechar mucho mejor la demanda extra que trae el evento.",
-  },
-};
-
-function renderResult() {
-  const level = computeLevel(state.problemas.size);
-  const levelInfo = LEVEL_COPY[level];
-  const contexto = BUSINESS_CONTEXT[state.tipoNegocio] || "";
-
-  const gapsHtml = [...state.problemas]
-    .map((p) => {
-      const info = PROBLEM_INSIGHTS[p];
-      if (!info) return "";
-      return `
-        <div class="gap-item">
-          <div class="g-title">${info.titulo}</div>
-          <div class="g-desc">${info.detalle}</div>
-        </div>`;
-    })
-    .join("");
-
-  document.getElementById("result-content").innerHTML = `
-    <div class="step-label">Resultado</div>
-    <h3 class="step-title">Tu diagnóstico digital personalizado</h3>
-
-    <div class="result-summary">
-      <div class="level-label">${levelInfo.label}</div>
-      <h3>${state.tipoNegocio}</h3>
-      <p>${levelInfo.desc} ${contexto}</p>
-    </div>
-
-    <div class="gap-list">
-      ${gapsHtml}
-    </div>
-
-    <div class="next-steps">
-      <h4>¡Listo! Ya registramos tu diagnóstico 🎉</h4>
-      <p>
-        Un asesor de IDE Solution se pondrá en contacto contigo por WhatsApp o
-        correo para conversar sobre un plan a la medida de tu negocio, antes
-        de la llegada de los turistas por la visita del Papa León XIV.
-      </p>
-    </div>
-  `;
-}

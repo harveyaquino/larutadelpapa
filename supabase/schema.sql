@@ -4,15 +4,22 @@
 create table if not exists public.leads (
   id                    uuid primary key default gen_random_uuid(),
   created_at            timestamptz not null default now(),
-  nombre                text not null,
+  nombre                text,
   negocio               text,
-  email                 text not null,
-  telefono              text not null,
+  email                 text,
+  telefono              text,
   tipo_negocio          text not null,
   problemas             text[] not null default '{}',
-  nivel_digitalizacion  text,
+  diagnostico_ia        jsonb,
   fuente                text default 'evento_papa_leon_xiv_2026'
 );
+
+-- El correo o el teléfono deben venir con algo (el formulario ya lo valida en el
+-- front, pero lo reforzamos acá): al menos uno de los dos debe estar presente.
+alter table public.leads
+  drop constraint if exists leads_contacto_check;
+alter table public.leads
+  add constraint leads_contacto_check check (email is not null or telefono is not null);
 
 -- Seguridad: activamos RLS y solo permitimos INSERT público (anon).
 -- Nadie puede leer, editar ni borrar datos usando la clave pública (anon key).

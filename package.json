@@ -1,0 +1,8 @@
+{
+  "name": "diagnostico-mype-cclam",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest"
+  }
+}

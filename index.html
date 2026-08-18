@@ -3,15 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Diagnóstico Digital MYPE — CCLAM Lambayeque</title>
+  <title>Diagnóstico Digital MYPE — CCLAM Lambayeque × IDE Solution</title>
   <meta name="description" content="Descubre en 2 minutos qué le falta a tu negocio para vender más durante la visita del Papa León XIV a Chiclayo." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
+  <a
+    class="whatsapp-float"
+    id="whatsapp-btn"
+    href="https://wa.me/51964484382?text=Hola%2C%20vi%20el%20Diagn%C3%B3stico%20Digital%20MYPE%20en%20el%20taller%20CCLAM%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n"
+    target="_blank"
+    rel="noopener"
+    aria-label="Escríbenos por WhatsApp"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.28-1.38a9.9 9.9 0 0 0 4.71 1.2h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0 0 12.04 2m0 1.67c2.2 0 4.27.86 5.82 2.41a8.2 8.2 0 0 1 2.42 5.83c0 4.55-3.7 8.24-8.25 8.24a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.13.82.84-3.05-.2-.31a8.18 8.18 0 0 1-1.26-4.37c0-4.55 3.7-8.24 8.25-8.24m-4.53 4.7c-.16 0-.43.06-.65.31s-.86.84-.86 2.05.88 2.38 1 2.55c.13.16 1.7 2.72 4.2 3.7 2.07.82 2.49.66 2.94.62.45-.04 1.45-.59 1.65-1.16.2-.57.2-1.06.14-1.16-.06-.1-.23-.16-.48-.29-.25-.12-1.45-.72-1.68-.8-.22-.08-.39-.12-.55.13-.16.24-.63.8-.78.96-.14.16-.29.18-.53.06-.25-.12-1.04-.38-1.99-1.23-.73-.66-1.23-1.46-1.37-1.71-.14-.24-.01-.38.11-.5.11-.11.25-.29.37-.44.12-.14.16-.24.24-.4.08-.16.04-.31-.02-.43-.06-.12-.55-1.36-.76-1.86-.2-.48-.4-.42-.55-.42h-.15" />
+    </svg>
+  </a>
+
   <header class="topbar">
     <div class="brand">
-      <span class="name">IDE Solution</span>
+      <img
+        src="https://www.ide-solution.com/wp-content/uploads/2020/06/logo_ide_2020-01.png.webp"
+        alt="IDE Solution"
+        width="140"
+        height="32"
+      />
       <span class="partner">× CCLAM Lambayeque</span>
     </div>
     <span class="badge-event">Visita del Papa León XIV · Chiclayo</span>
@@ -26,12 +44,12 @@
         <h1>¿Está tu negocio preparado para vender más?</h1>
         <p>
           Miles de turistas llegarán a Chiclayo por la visita del Papa León XIV.
-          Responde unas preguntas y descubre gratis qué oportunidades está
-          perdiendo tu negocio hoy — y qué te falta para aprovechar la ola de
-          clientes que se viene.
+          Responde unas preguntas y una IA analiza al instante qué oportunidades
+          está perdiendo tu negocio hoy — y qué te falta para aprovechar la ola
+          de clientes que se viene.
         </p>
         <div class="cta-center">
-          <button class="btn btn-gold" id="btn-start">Empezar mi diagnóstico →</button>
+          <button class="btn btn-primary" id="btn-start" style="padding:14px 28px; font-size:1rem;">Empezar mi diagnóstico →</button>
         </div>
         <div class="stat-row">
           <div class="stat">
@@ -60,8 +78,6 @@
             <div class="step-dot" data-step="2">2</div>
             <div class="step-line"></div>
             <div class="step-dot" data-step="3">3</div>
-            <div class="step-line"></div>
-            <div class="step-dot" data-step="4">4</div>
           </div>
         </div>
 
@@ -69,7 +85,7 @@
 
           <!-- PASO 1: TIPO DE NEGOCIO -->
           <div class="step-panel" id="panel-1">
-            <div class="step-label">Paso 1 de 3</div>
+            <div class="step-label">Paso 1 de 2</div>
             <h3 class="step-title">¿Qué tipo de negocio tienes?</h3>
             <div class="option-grid" id="business-grid">
               <div class="option-card" data-value="Comercio / tienda">
@@ -105,7 +121,7 @@
 
           <!-- PASO 2: PROBLEMAS DIGITALES -->
           <div class="step-panel hidden" id="panel-2">
-            <div class="step-label">Paso 2 de 3</div>
+            <div class="step-label">Paso 2 de 2</div>
             <h3 class="step-title">¿Cuáles son tus principales problemas digitales?</h3>
             <div class="option-grid" id="problems-grid">
               <div class="option-card problem-card" data-value="No tengo web ni presencia online">
@@ -135,57 +151,70 @@
             </div>
             <div class="btn-row">
               <button class="btn btn-ghost" id="btn-to-1">← Atrás</button>
-              <button class="btn btn-primary" id="btn-to-3" disabled>Siguiente →</button>
+              <button class="btn btn-primary" id="btn-to-3" disabled>Ver mi diagnóstico →</button>
             </div>
           </div>
 
-          <!-- PASO 3: DATOS DE CONTACTO -->
+          <!-- PASO 3: RESULTADO (IA) + CONTACTO OPCIONAL -->
           <div class="step-panel hidden" id="panel-3">
-            <div class="step-label">Paso 3 de 3</div>
-            <h3 class="step-title">¿A dónde te enviamos tu diagnóstico?</h3>
+            <div class="step-label">Resultado</div>
+            <h3 class="step-title">Tu diagnóstico digital personalizado</h3>
 
-            <div id="form-error" class="error-banner hidden"></div>
+            <div id="ai-loading" class="ai-loading">
+              <div class="spinner-lg"></div>
+              Analizando tu negocio con IA…
+            </div>
 
-            <form id="lead-form">
-              <div class="form-grid">
-                <div class="field">
-                  <label for="f-nombre">Nombre completo *</label>
-                  <input type="text" id="f-nombre" autocomplete="name" required />
-                  <div class="err"></div>
-                </div>
-                <div class="field">
-                  <label for="f-negocio">Nombre de tu negocio</label>
-                  <input type="text" id="f-negocio" autocomplete="organization" />
-                  <div class="err"></div>
-                </div>
-                <div class="field">
-                  <label for="f-email">Correo electrónico *</label>
-                  <input type="email" id="f-email" autocomplete="email" required />
-                  <div class="err"></div>
-                </div>
-                <div class="field">
-                  <label for="f-telefono">WhatsApp / Celular *</label>
-                  <input type="tel" id="f-telefono" autocomplete="tel" required />
-                  <div class="err"></div>
-                </div>
+            <div id="ai-result" class="hidden">
+              <div class="result-summary">
+                <h3 class="gancho" id="res-gancho"></h3>
+                <p id="res-parrafo"></p>
               </div>
 
-              <label class="consent">
-                <input type="checkbox" id="f-consent" required />
-                <span>Acepto que CCLAM Lambayeque e IDE Solution usen estos datos para
-                  enviarme mi diagnóstico y contactarme con información relacionada. *</span>
-              </label>
+              <div class="gap-list" id="res-oportunidades"></div>
 
-              <div class="btn-row">
-                <button type="button" class="btn btn-ghost" id="btn-to-2b">← Atrás</button>
-                <button type="submit" class="btn btn-primary" id="btn-submit">Ver mi diagnóstico →</button>
+              <div class="lead-box" id="lead-box">
+                <h4>¿Quieres el informe completo?</h4>
+                <p class="sub">
+                  Te lo enviamos a tu correo con el detalle de cada oportunidad.
+                  Dejar tus datos es totalmente opcional.
+                </p>
+
+                <div id="lead-error" class="error-banner hidden"></div>
+
+                <form id="lead-form">
+                  <div class="form-grid">
+                    <div class="field">
+                      <label for="f-nombre">Nombre</label>
+                      <input type="text" id="f-nombre" autocomplete="name" />
+                    </div>
+                    <div class="field">
+                      <label for="f-negocio">Nombre de tu negocio</label>
+                      <input type="text" id="f-negocio" autocomplete="organization" />
+                    </div>
+                    <div class="field full">
+                      <label for="f-email">Correo electrónico</label>
+                      <input type="email" id="f-email" autocomplete="email" placeholder="tucorreo@ejemplo.com" />
+                    </div>
+                    <div class="field full">
+                      <label for="f-telefono">WhatsApp / Celular (opcional)</label>
+                      <input type="tel" id="f-telefono" autocomplete="tel" />
+                    </div>
+                  </div>
+
+                  <div class="btn-row">
+                    <span></span>
+                    <button type="submit" class="btn btn-primary" id="btn-submit">Enviarme el informe completo →</button>
+                  </div>
+                </form>
+
+                <div id="lead-success" class="lead-success hidden">
+                  <div class="big-check">✅</div>
+                  <strong>¡Gracias! Ya registramos tu informe.</strong>
+                  <p class="sub">Un asesor de IDE Solution te escribirá pronto.</p>
+                </div>
               </div>
-            </form>
-          </div>
-
-          <!-- PASO 4: RESULTADO -->
-          <div class="step-panel hidden" id="panel-4">
-            <div id="result-content"></div>
+            </div>
           </div>
 
         </div>
@@ -194,7 +223,7 @@
 
   </main>
 
-  <footer>
+  <footer class="site-footer">
     CCLAM Lambayeque × IDE Solution — Taller especial: Visita del Papa León XIV, Chiclayo 2026
   </footer>
 
